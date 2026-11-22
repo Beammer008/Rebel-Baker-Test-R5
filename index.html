@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#171717"><title>Bakery Studio V2 | Rebel Baker</title>
+<link rel="manifest" href="manifest.json"><link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar"><div class="brand"><span class="mark">B.</span><div><b id="brandTopApp">BAKERY STUDIO</b><small id="brandTopName">REBEL BAKER · V2 PREVIEW</small></div></div><button class="avatar" aria-label="เมนู">RB</button></header>
+<main>
+<section id="dashboard" class="page active">
+  <div class="hero">
+    <div class="hero-copy"><span class="eyebrow" id="dashSubSlogan">YOUR CREATIVE KITCHEN</span><h1><span id="dashSlogan">BAKE BOLD.<br><em>BUILD YOUR</em><br>BUSINESS.</span></h1><p>พื้นที่ทดลองสูตร คุมต้นทุน และสร้างผลงานในแบบของคุณ</p><button class="primary" onclick="newRecipe()">＋ CREATE NEW RECIPE</button></div>
+    <div class="hero-art"><div class="orbit"></div><div class="cake">✳</div><span class="art-tag">MADE<br>FROM<br>SCRATCH</span></div>
+  </div>
+  <div class="section-head"><div><span class="eyebrow">AT A GLANCE</span><h2>Your studio</h2></div><span class="live">● LOCAL DATA</span></div>
+  <div class="stats"><button class="stat lime" onclick="showPage('recipes')"><span>RECIPES</span><b id="recipeCount">0</b><small>สูตรทั้งหมด ↗</small></button><button class="stat blue" onclick="showPage('ingredients')"><span>INGREDIENTS</span><b id="ingredientCount">0</b><small>วัตถุดิบ ↗</small></button><button class="stat pink" onclick="showPage('products')"><span>PRODUCTS</span><b id="productCount">0</b><small>สินค้า ↗</small></button></div>
+  <div class="section-head"><div><span class="eyebrow">LATEST WORK</span><h2>Recent creations</h2></div><button class="text-btn" onclick="showPage('recipes')">VIEW ALL ↗</button></div>
+  <div id="recent" class="recent empty">Your next signature bake starts here.</div>
+</section>
+<section id="recipes" class="page"><div class="page-title"><span class="eyebrow">THE RECIPE BOOK</span><h1>Recipe library<span class="dot">.</span></h1><button class="primary" onclick="newRecipe()">＋ NEW RECIPE</button></div><div id="recipeList" class="list empty">ยังไม่มีสูตร เริ่มสร้างสูตรแรกของคุณได้เลย</div></section>
+<section id="editor" class="page">
+  <div class="page-title"><span class="eyebrow">RECIPE COST SHEET</span><h1 id="editorTitle">New recipe<span class="dot">.</span></h1><button class="text-btn" onclick="showPage('recipes')">← BACK TO RECIPES</button></div>
+  <div class="panel">
+   <div class="field-grid"><label>ชื่อสูตร<input id="rName" placeholder="เช่น Levain Cookies"></label><label>หมวดหมู่<select id="rCategory"><option>Cookies</option><option>Bread</option><option>Cake</option><option>Pastry</option><option>Other</option></select></label><label>จำนวนที่ได้ (ชิ้น)<input id="rYield" type="number" min="1" value="12"></label></div>
+   <div class="subhead"><div><span class="eyebrow">01 / INGREDIENTS</span><h2>วัตถุดิบ</h2></div><button class="small-btn" onclick="addIngredientRow()">＋ ADD ROW</button></div>
+   <div class="helper-note">เลือกวัตถุดิบจากคลังเพื่อเติมข้อมูลซื้อให้อัตโนมัติ หรือพิมพ์ชื่อใหม่ได้ · ระบบจะแจ้งเมื่อหน่วยแปลงกันไม่ได้</div>
+   <datalist id="ingredientOptions"></datalist>
+   <div class="table-wrap"><table class="cost-table"><thead><tr><th>วัตถุดิบ</th><th>ขนาดซื้อ</th><th>หน่วยซื้อ</th><th>ราคาซื้อ ฿</th><th>ใช้ในสูตร</th><th>หน่วยใช้</th><th>ต้นทุน ฿</th><th></th></tr></thead><tbody id="ingredientRows"></tbody></table></div>
+   <div id="costWarnings" class="cost-warnings" aria-live="polite"></div>
+   <div class="subhead"><div><span class="eyebrow">02 / EXTRA COSTS</span><h2>Packaging & other</h2></div><button class="small-btn" onclick="addExtraRow()">＋ ADD COST</button></div>
+   <div id="extraRows"></div>
+   <div class="subhead"><div><span class="eyebrow">03 / YIELD & PRICING</span><h2>Cost breakdown</h2></div></div>
+   <div class="cost-grid"><div class="cost-card"><span>วัตถุดิบ</span><b id="ingredientTotal">฿0.00</b></div><div class="cost-card"><span>ค่าใช้จ่ายเพิ่ม</span><b id="extraTotal">฿0.00</b></div><div class="cost-card dark"><span>ต้นทุนต่อสูตร</span><b id="batchTotal">฿0.00</b></div><div class="cost-card lime-card"><span>ต้นทุนต่อชิ้น</span><b id="pieceTotal">฿0.00</b></div></div>
+   <div class="field-grid pricing"><label>ราคาขายต่อชิ้น ฿<input id="sellingPrice" type="number" min="0" step=".01" value="0" oninput="calculate()"></label><div class="margin-box"><span>กำไรต่อชิ้น</span><b id="profit">฿0.00</b><small id="margin">Margin 0%</small></div></div>
+   <div class="actions"><button class="secondary" onclick="showPage('recipes')">CANCEL</button><button class="primary" onclick="saveRecipe()">SAVE RECIPE ↗</button></div>
+  </div>
+</section>
+<section id="ingredients" class="page"><div class="page-title"><span class="eyebrow">YOUR PANTRY</span><h1>Ingredients<span class="dot">.</span></h1></div><div class="panel">
+<p class="muted">บันทึกข้อมูลซื้อเพียงครั้งเดียว แล้วเลือกใช้ในสูตรได้ทันที ราคาต่อหน่วยจะคำนวณให้อัตโนมัติ</p>
+<div class="ingredient-form">
+<label>ชื่อวัตถุดิบ<input id="libName" placeholder="เช่น Salted Butter"></label>
+<label>ขนาดบรรจุ<input id="libPackQty" type="number" min="0" step="any" placeholder="250"></label>
+<label>หน่วยซื้อ<select id="libPackUnit"><option value="g">g</option><option value="kg">kg</option><option value="ml">ml</option><option value="L">L</option><option value="pcs">pcs</option></select></label>
+<label>ราคาซื้อ (฿)<input id="libPackPrice" type="number" min="0" step="any" placeholder="159"></label>
+<label>ความหนาแน่น (g/ml) · ไม่บังคับ<input id="libDensity" type="number" min="0" step="any" placeholder="เช่น 0.92"></label>
+<label>ที่มาของ Density<input id="libDensitySource" placeholder="เช่น ฉลากผู้ผลิต / เอกสารอ้างอิง"></label>
+<label>ความน่าเชื่อถือของ Density<select id="libDensityReliability"><option value="unknown">ยังไม่ระบุ</option><option value="label">ฉลาก / ผู้ผลิต</option><option value="reference">แหล่งอ้างอิง</option><option value="measured">ทดลองชั่ง/ตวงเอง</option><option value="estimated">ค่าประมาณ</option></select></label>
+<label>น้ำหนักต่อ 1 tsp (g) · ไม่บังคับ<input id="libTspGrams" type="number" min="0" step="any" placeholder="เช่น Baking Soda 4.6"></label>
+<label>ที่มาของค่า g/tsp<input id="libTspSource" placeholder="เช่น ทดลองชั่งด้วยช้อนปาด"></label>
+<label>ความน่าเชื่อถือของค่า g/tsp<select id="libTspReliability"><option value="unknown">ยังไม่ระบุ</option><option value="label">ฉลาก / ผู้ผลิต</option><option value="reference">แหล่งอ้างอิง</option><option value="measured">ทดลองชั่ง/ตวงเอง</option><option value="estimated">ค่าประมาณ</option></select></label>
+</div>
+<p class="form-hint">Density ใช้เฉพาะเมื่อแปลง g ↔ ml · ค่า g/tsp ใช้กับช้อนตวงของวัตถุดิบนั้นโดยเฉพาะ · ทั้งสองค่าเว้นว่างได้ ระบบจะไม่เดาค่าให้เอง</p>
+<div class="actions"><button class="secondary" id="cancelIngredientEdit" onclick="cancelIngredientEdit()" hidden>CANCEL EDIT</button><button class="primary" id="saveIngredientButton" onclick="addLibraryIngredient()">＋ SAVE INGREDIENT</button></div>
+<div id="ingredientLibrary" class="list"></div></div></section>
+<section id="products" class="page"><div class="page-title"><span class="eyebrow">PRODUCT PORTFOLIO</span><h1>Products<span class="dot">.</span></h1></div><div class="panel"><p class="muted">พื้นที่สำหรับจัดกลุ่มสูตรเป็นสินค้าที่พร้อมขาย จะต่อยอดในขั้นถัดไปค่ะ</p><div class="empty">PRODUCT CATALOG · COMING NEXT</div></div></section>
+<section id="settings" class="page"><div class="page-title"><span class="eyebrow">STUDIO CONTROL</span><h1>Settings<span class="dot">.</span></h1></div>
+<div class="panel"><span class="eyebrow">YOUR BRAND IDENTITY</span><h2>Brand settings</h2>
+<p class="muted">ปรับชื่อแอป ชื่อแบรนด์ และ Slogan ได้เอง การเปลี่ยนแปลงจะบันทึกไว้ในเบราว์เซอร์นี้</p>
+<div class="field-grid brand-fields">
+<label>App Name<input id="brandAppInput" placeholder="Bakery Studio"></label>
+<label>Brand Name<input id="brandNameInput" placeholder="REBEL BAKER"></label>
+<label>Main Slogan<input id="brandSloganInput" placeholder="Bake Bold. Build Your Business."></label>
+<label>Sub Slogan<input id="brandSubInput" placeholder="Your Creative Kitchen"></label>
+</div>
+<div class="actions"><button class="secondary" onclick="restoreBrandDefaults()">RESTORE DEFAULT</button><button class="primary" onclick="saveBrandSettings()">SAVE BRAND SETTINGS</button></div>
+</div>
+<div class="panel"><h2>Local backup</h2><p class="muted">ข้อมูล Preview เก็บไว้ในเบราว์เซอร์เครื่องนี้เท่านั้น ควร Export สำรองเป็นระยะ</p><div class="actions"><button class="secondary" onclick="exportData()">EXPORT BACKUP</button><label class="small-btn file-btn">IMPORT BACKUP<input type="file" accept="application/json" onchange="importData(event)" hidden></label></div><p class="warning">หมายเหตุ: นี่เป็น V2 Preview แยกจาก V1 ยังไม่มีระบบย้ายข้อมูลอัตโนมัติ และการล้างข้อมูลเว็บไซต์อาจทำให้ข้อมูลในเครื่องหายได้</p></div></section>
+</main>
+<nav class="bottom-nav"><button class="selected" data-page="dashboard" onclick="showPage('dashboard')">⌂<small>HOME</small></button><button data-page="recipes" onclick="showPage('recipes')">▤<small>RECIPES</small></button><button data-page="ingredients" onclick="showPage('ingredients')">◈<small>PANTRY</small></button><button data-page="products" onclick="showPage('products')">▧<small>PRODUCTS</small></button><button data-page="settings" onclick="showPage('settings')">⚙<small>SETTINGS</small></button></nav>
+<script src="app.js"></script>
+</body></html>
