@@ -1,0 +1,9 @@
+{
+  "name": "Bakery Studio V2",
+  "short_name": "Bakery Studio",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f4f4f0",
+  "theme_color": "#171717",
+  "icons": []
+}
